@@ -1,22 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { NavbarLogo } from "./NavbarLogo";
 import { NavLinks } from "./NavLinks";
 import { NavAuthActions } from "./NavAuthActions";
 import { MobileMenu } from "./MobileMenu";
+import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      <header className="sticky top-0 z-30 w-full bg-[#F7F5F0] border-b border-[#18221E]/10">
+      <header
+        className={cn(
+          "sticky top-0 z-40 w-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          isScrolled
+            ? "bg-[#F7F5F0]/85 backdrop-blur-md border-b border-[#18221E]/10 shadow-[0_4px_24px_-4px_rgba(24,34,30,0.06)]"
+            : "bg-[#F7F5F0] border-b border-[#18221E]/5"
+        )}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div
+            className={cn(
+              "flex items-center justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              isScrolled ? "h-14 sm:h-15" : "h-16 sm:h-18"
+            )}
+          >
             {/* Left Edge: Pure Typographic Wordmark */}
-            <div className="flex-shrink-0 flex items-center">
+            <div className="flex-shrink-0 flex items-center transition-transform duration-300">
               <NavbarLogo />
             </div>
 

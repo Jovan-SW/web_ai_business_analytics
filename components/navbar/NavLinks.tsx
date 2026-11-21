@@ -15,18 +15,18 @@ export const NAV_ITEMS: NavItem[] = [
     href: "#product",
     subItems: [
       {
-        title: "AI Business Workflow",
-        description: "Automasi alur pipeline analitik bisnis berbasis multi-agent.",
+        title: "Business Workflow",
+        description: "Automate end-to-end analytical pipelines with multi-agent orchestration.",
         href: "#product-workflow",
       },
       {
         title: "Instant Analytics Engine",
-        description: "Ekstrak insight finansial & pasar dalam hitungan detik.",
+        description: "Extract actionable financial and market intelligence in sub-seconds.",
         href: "#product-engine",
       },
       {
         title: "Integration Hub",
-        description: "Sinkronkan dengan data internal, database, dan CRM.",
+        description: "Seamlessly synchronize internal databases, spreadsheets, and CRMs.",
         href: "#product-integration",
       },
     ],
@@ -36,18 +36,18 @@ export const NAV_ITEMS: NavItem[] = [
     href: "#solution",
     subItems: [
       {
-        title: "Founder & Eksekutif",
-        description: "Pengambilan keputusan cepat dengan proyeksi dan scenario modeling.",
+        title: "Founders & Executives",
+        description: "High-conviction decision making backed by continuous scenario modeling.",
         href: "#solution-executive",
       },
       {
-        title: "Tim Finansial & Operasional",
-        description: "Deteksi anomali biaya dan optimasi efisiensi modal bisnis.",
+        title: "Finance & Operations",
+        description: "Detect budget anomalies early and optimize capital allocation.",
         href: "#solution-finance",
       },
       {
-        title: "Bisnis Skala Menengah",
-        description: "Kecerdasan bisnis komprehensif tanpa memerlukan tim analis besar.",
+        title: "Mid-Market Growth",
+        description: "Enterprise-grade business intelligence without a large analyst headcount.",
         href: "#solution-sme",
       },
     ],
@@ -72,7 +72,7 @@ export function NavLinks({ className = "" }: NavLinksProps) {
   return (
     <nav
       className={`hidden md:flex items-center gap-1 ${className}`}
-      aria-label="Navigasi Utama"
+      aria-label="Main Navigation"
     >
       {NAV_ITEMS.map((item) => {
         const hasSub = Boolean(item.subItems && item.subItems.length > 0);
