@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/ui/hero-section-2";
+import { ProductSection } from "@/components/product/ProductSection";
 
 export default function Home() {
   return (
@@ -48,9 +49,12 @@ export default function Home() {
             tag: "CONTINUOUS DECISION INTELLIGENCE",
             headline: "From Raw Data to Executive Action",
             description:
-              "See how Jovix transforms complex data streams into high-margin strategic execution.",
+              "Jovix unifies your entire business analysis lifecycle through three foundational pillars—eliminating operational blind spots, automating variance detection, and turning raw ledgers into strategic execution.",
           }}
         />
+
+        {/* 3. Product Section: Visual Before & After (From Chaos to Clarity) */}
+        <ProductSection />
 
         {/* Existing Section (No new sections added) */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">

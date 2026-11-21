@@ -13,44 +13,10 @@ export const NAV_ITEMS: NavItem[] = [
   {
     label: "Product",
     href: "#product",
-    subItems: [
-      {
-        title: "Business Workflow",
-        description: "Automate end-to-end analytical pipelines with multi-agent orchestration.",
-        href: "#product-workflow",
-      },
-      {
-        title: "Instant Analytics Engine",
-        description: "Extract actionable financial and market intelligence in sub-seconds.",
-        href: "#product-engine",
-      },
-      {
-        title: "Integration Hub",
-        description: "Seamlessly synchronize internal databases, spreadsheets, and CRMs.",
-        href: "#product-integration",
-      },
-    ],
   },
   {
     label: "Solution",
     href: "#solution",
-    subItems: [
-      {
-        title: "Founders & Executives",
-        description: "High-conviction decision making backed by continuous scenario modeling.",
-        href: "#solution-executive",
-      },
-      {
-        title: "Finance & Operations",
-        description: "Detect budget anomalies early and optimize capital allocation.",
-        href: "#solution-finance",
-      },
-      {
-        title: "Mid-Market Growth",
-        description: "Enterprise-grade business intelligence without a large analyst headcount.",
-        href: "#solution-sme",
-      },
-    ],
   },
   {
     label: "How it works",

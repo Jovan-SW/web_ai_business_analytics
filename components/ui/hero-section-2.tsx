@@ -115,6 +115,70 @@ const InfoIcon = ({
   return <div className="mr-2.5 flex-shrink-0">{icons[type] || icons.website}</div>;
 };
 
+// Clean SVG Icon component for the 3 Pillars
+const PillarIcon = ({
+  type,
+}: {
+  type: "analytics" | "intelligence" | "automation";
+}) => {
+  switch (type) {
+    case "analytics":
+      return (
+        <svg
+          className="w-4.5 h-4.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3 3v18h18" />
+          <path d="m19 9-5 5-4-4-3 3" />
+        </svg>
+      );
+    case "intelligence":
+      return (
+        <svg
+          className="w-4.5 h-4.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v4" />
+          <path d="M12 18v4" />
+          <path d="m4.93 4.93 2.83 2.83" />
+          <path d="m16.24 16.24 2.83 2.83" />
+          <path d="M2 12h4" />
+          <path d="M18 12h4" />
+        </svg>
+      );
+    case "automation":
+      return (
+        <svg
+          className="w-4.5 h-4.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="6" cy="6" r="3" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="12" r="3" />
+          <path d="M9 6h4a5 5 0 0 1 5 5" />
+          <path d="M9 18h4a5 5 0 0 0 5-5" />
+          <path d="M6 9v6" />
+        </svg>
+      );
+  }
+};
+
 // Vertical Text Rotator Component
 export function VerticalTextRotator({
   words,
@@ -160,6 +224,45 @@ export function VerticalTextRotator({
   );
 }
 
+// Pillar Data Interface
+export interface PillarItem {
+  number?: string;
+  tag?: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  status?: string;
+  specs?: string[];
+  iconType?: "analytics" | "intelligence" | "automation";
+}
+
+export const DEFAULT_PILLARS: PillarItem[] = [
+  {
+    tag: "LEDGER SYNTHESIS",
+    title: "Business Analytics",
+    subtitle: "Unified Ledger & Metric Modeling",
+    description:
+      "Ingests and normalizes raw transactional records across ERPs, databases, and payment processors into a single unified data plane. Uncovers accurate unit economics, gross margins, and live cash runway with zero manual spreadsheet reconciliation.",
+    iconType: "analytics",
+  },
+  {
+    tag: "REASONING ENGINE",
+    title: "AI Intelligence",
+    subtitle: "Autonomous Variance & Leak Detection",
+    description:
+      "Performs continuous heuristic audits across journal entries and operational expenses. Pinpoints vendor overcharges, unit-cost variance spikes, and stealth margin decay weeks before accounting books close.",
+    iconType: "intelligence",
+  },
+  {
+    tag: "CLOSED-LOOP OPS",
+    title: "Workflow Automation",
+    subtitle: "Closed-Loop Action & Bi-Directional Sync",
+    description:
+      "Converts static analytical findings into automated operational workflows. Dispatches prioritized resolution alerts to department owners and synchronizes reconciled entries directly back into your accounting stack.",
+    iconType: "automation",
+  },
+];
+
 // Prop types for the HeroSection component
 export interface HeroSectionProps
   extends Omit<HTMLMotionProps<"section">, "title"> {
@@ -191,6 +294,7 @@ export interface HeroSectionProps
     label: string;
     value: string;
   }[];
+  pillars?: PillarItem[];
   nextSectionPreview?: {
     tag?: string;
     headline?: string;
@@ -212,11 +316,12 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
       backgroundImage,
       contactInfo,
       metrics,
+      pillars = DEFAULT_PILLARS,
       nextSectionPreview = {
-        tag: "CONTINUOUS ENTERPRISE INTELLIGENCE",
-        headline: "From Raw Operations to Boardroom Execution",
+        tag: "CONTINUOUS DECISION INTELLIGENCE",
+        headline: "From Raw Data to Executive Action",
         description:
-          "See how Jovix transforms complex data streams into high-margin strategic action.",
+          "Jovix unifies your entire business analysis lifecycle through three foundational pillars—eliminating operational blind spots, automating variance detection, and turning raw ledgers into strategic execution.",
       },
       ...props
     },
@@ -230,15 +335,15 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
     });
 
     // 1. Hero Left Content: Fades out and slides slightly left as scroll progresses
-    const heroContentOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
-    const heroContentX = useTransform(scrollYProgress, [0, 0.28], [0, -35]);
+    const heroContentOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0]);
+    const heroContentX = useTransform(scrollYProgress, [0, 0.22], [0, -35]);
 
     // 2. Right Image: Shifts left from 60% to 0%, expands to 100% full width, and clipPath straightens
-    const imageLeft = useTransform(scrollYProgress, [0.08, 0.52], ["60%", "0%"]);
-    const imageWidth = useTransform(scrollYProgress, [0.08, 0.52], ["40%", "100%"]);
+    const imageLeft = useTransform(scrollYProgress, [0.06, 0.44], ["60%", "0%"]);
+    const imageWidth = useTransform(scrollYProgress, [0.06, 0.44], ["40%", "100%"]);
     const imageClipPath = useTransform(
       scrollYProgress,
-      [0.08, 0.45],
+      [0.06, 0.38],
       [
         "polygon(18% 0, 100% 0, 100% 100%, 0% 100%)",
         "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)",
@@ -246,11 +351,11 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
     );
 
     // 3. Dark Overlay: Deepens as image expands to provide perfect contrast for the incoming text
-    const overlayOpacity = useTransform(scrollYProgress, [0.15, 0.55], [0.35, 0.85]);
+    const overlayOpacity = useTransform(scrollYProgress, [0.12, 0.48], [0.35, 0.88]);
 
-    // 4. Next Section Title & Copy: Appears in center of the full-width image
-    const nextContentOpacity = useTransform(scrollYProgress, [0.55, 0.85], [0, 1]);
-    const nextContentY = useTransform(scrollYProgress, [0.55, 0.85], [35, 0]);
+    // 4. Next Section Title, Description & 3 Pillars Grid: Appears when image is full
+    const nextContentOpacity = useTransform(scrollYProgress, [0.42, 0.72], [0, 1]);
+    const nextContentY = useTransform(scrollYProgress, [0.42, 0.72], [40, 0]);
 
     // Staggered container animation orchestrating entrance
     const containerVariants: Variants = {
@@ -284,7 +389,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
     return (
       <div
         ref={scrollContainerRef}
-        className="relative w-full h-auto md:h-[220vh]"
+        className="relative w-full h-auto md:h-[260vh]"
       >
         {/* Sticky Viewport Stage */}
         <motion.section
@@ -354,8 +459,8 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
                   className="my-6 flex items-center gap-1.5"
                   variants={itemVariants}
                 >
-                  <div className="h-1 w-16 rounded-full bg-[#134E4A]" />
-                  <div className="h-1 w-4 rounded-full bg-[#D97706]" />
+                  <div className="h-1 w-16 bg-[#134E4A]" />
+                  <div className="h-1 w-4 bg-[#D97706]" />
                 </motion.div>
 
                 {/* Subheadline: Expanded, clear, highly readable */}
@@ -477,51 +582,77 @@ const HeroSection = React.forwardRef<HTMLElement, HeroSectionProps>(
               style={{ backgroundImage: `url(${bgUrl})` }}
             />
 
-            {/* Atmospheric Dynamic Overlay */}
+            {/* Atmospheric Dynamic Overlay with Ambient Lighting for Clarity */}
             <motion.div
               style={{ opacity: overlayOpacity }}
-              className="absolute inset-0 bg-gradient-to-tr from-[#134E4A] via-[#0F3F3C] to-[#18221E] mix-blend-multiply"
+              className="absolute inset-0 bg-gradient-to-tr from-[#134E4A]/90 via-[#0F3F3C]/80 to-[#18221E]/95"
             />
-            <div className="absolute inset-0 bg-black/35" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/55 to-black/85" />
 
-            {/* Next Section Transition Content: Emerges when image covers full screen */}
+            {/* Next Section: 3 Pillars Introduction (Emerges when image is full-width) */}
             {nextSectionPreview && (
               <motion.div
                 style={{ opacity: nextContentOpacity, y: nextContentY }}
-                className="relative z-30 max-w-2xl text-center px-6 sm:px-8 py-12 text-white"
+                className="relative z-30 max-w-6xl w-full text-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-white flex flex-col justify-center h-full max-h-full overflow-y-auto"
               >
+                {/* Header Tag - Clean Architectural Overline (Zero Bubbles) */}
                 {nextSectionPreview.tag && (
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-mono uppercase tracking-widest text-[#D97706] mb-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#D97706] animate-pulse" />
-                    <span>{nextSectionPreview.tag}</span>
-                  </div>
+                  <p className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-[0.24em] text-[#D97706] mb-3">
+                    {nextSectionPreview.tag}
+                  </p>
                 )}
 
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+                {/* Main Heading */}
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white drop-shadow-sm">
                   {nextSectionPreview.headline}
                 </h2>
 
+                {/* Subtitle / Intro */}
                 {nextSectionPreview.description && (
-                  <p className="mt-4 text-base sm:text-lg text-white/80 leading-relaxed max-w-xl mx-auto">
+                  <p className="mt-3 text-xs sm:text-sm md:text-base text-white/90 leading-relaxed max-w-2xl mx-auto font-normal drop-shadow-sm">
                     {nextSectionPreview.description}
                   </p>
                 )}
 
-                <div className="mt-8 flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-[#D97706]/90">
-                  <span>Scroll to explore architecture</span>
-                  <svg
-                    className="w-4 h-4 animate-bounce"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                    />
-                  </svg>
+                {/* The 3 Core Pillars Grid - Bright, Assertive & Professional Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 mt-6 sm:mt-8 text-left">
+                  {pillars.map((pillar, idx) => (
+                    <div
+                      key={pillar.title || idx}
+                      className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-[#FFFFFF] text-[#18221E] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.35)] hover:shadow-[0_28px_60px_-12px_rgba(0,0,0,0.45)] border border-[#EFECE6] transition-all duration-300 hover:-translate-y-1.5"
+                    >
+                      {/* Top Accent Line for Assertive Definition */}
+                      <div className="absolute top-0 left-6 right-6 h-[3px] bg-[#18221E]/10 group-hover:bg-[#134E4A] transition-colors duration-300" />
+
+                      <div>
+                        {/* Clean Architectural Header (No Bubbles, No Numbers) */}
+                        <div className="flex items-center justify-between mb-4 pt-1">
+                          {pillar.tag && (
+                            <span className="font-mono text-[11px] font-bold tracking-wider uppercase text-[#D97706]">
+                              {pillar.tag}
+                            </span>
+                          )}
+
+                          <div className="w-9 h-9 rounded-lg bg-[#F7F5F0] border border-[#18221E]/10 text-[#134E4A] flex items-center justify-center group-hover:bg-[#134E4A] group-hover:text-white transition-colors duration-300">
+                            <PillarIcon type={pillar.iconType || "analytics"} />
+                          </div>
+                        </div>
+
+                        {/* Title & Subtitle */}
+                        <h3 className="text-lg sm:text-xl font-extrabold text-[#18221E] tracking-tight group-hover:text-[#134E4A] transition-colors">
+                          {pillar.title}
+                        </h3>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-[#D97706] mt-1 font-mono">
+                          {pillar.subtitle}
+                        </p>
+
+                        {/* Highly Readable Description */}
+                        <p className="mt-3.5 text-xs sm:text-sm text-[#18221E]/80 leading-relaxed font-normal">
+                          {pillar.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             )}
