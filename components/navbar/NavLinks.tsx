@@ -6,7 +6,6 @@ import { useState } from "react";
 export interface NavItem {
   label: string;
   href: string;
-  badge?: string;
   subItems?: { title: string; description: string; href: string }[];
 }
 
@@ -14,21 +13,20 @@ export const NAV_ITEMS: NavItem[] = [
   {
     label: "Product",
     href: "#product",
-    badge: "v2.0",
     subItems: [
       {
         title: "AI Business Workflow",
-        description: "Automasi alur pipeline analitik bisnis berbasis AI",
+        description: "Automasi alur pipeline analitik bisnis berbasis multi-agent.",
         href: "#product-workflow",
       },
       {
         title: "Instant Analytics Engine",
-        description: "Ekstrak insight finansial & metrik pasar dalam hitungan detik",
+        description: "Ekstrak insight finansial & pasar dalam hitungan detik.",
         href: "#product-engine",
       },
       {
         title: "Integration Hub",
-        description: "Sambungkan ke data internal, spreadsheet, dan CRM",
+        description: "Sinkronkan dengan data internal, database, dan CRM.",
         href: "#product-integration",
       },
     ],
@@ -38,18 +36,18 @@ export const NAV_ITEMS: NavItem[] = [
     href: "#solution",
     subItems: [
       {
-        title: "Eksekutif & Founder",
-        description: "Keputusan strategis cepat dengan simulasi forecasting",
+        title: "Founder & Eksekutif",
+        description: "Pengambilan keputusan cepat dengan proyeksi dan scenario modeling.",
         href: "#solution-executive",
       },
       {
         title: "Tim Finansial & Operasional",
-        description: "Deteksi anomali anggaran dan optimasi efisiensi modal",
+        description: "Deteksi anomali biaya dan optimasi efisiensi modal bisnis.",
         href: "#solution-finance",
       },
       {
-        title: "Bisnis Skala Menengah (SME)",
-        description: "Analisis kompetitor otomatis tanpa tim analis besar",
+        title: "Bisnis Skala Menengah",
+        description: "Kecerdasan bisnis komprehensif tanpa memerlukan tim analis besar.",
         href: "#solution-sme",
       },
     ],
@@ -73,72 +71,80 @@ export function NavLinks({ className = "" }: NavLinksProps) {
 
   return (
     <nav
-      className={`hidden md:flex items-center gap-1 lg:gap-2 ${className}`}
+      className={`hidden md:flex items-center gap-1 ${className}`}
       aria-label="Navigasi Utama"
     >
       {NAV_ITEMS.map((item) => {
-        const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
+        const hasSub = Boolean(item.subItems && item.subItems.length > 0);
         const isOpen = activeDropdown === item.label;
 
         return (
           <div
             key={item.label}
             className="relative"
-            onMouseEnter={() => hasSubItems && setActiveDropdown(item.label)}
-            onMouseLeave={() => hasSubItems && setActiveDropdown(null)}
+            onMouseEnter={() => hasSub && setActiveDropdown(item.label)}
+            onMouseLeave={() => hasSub && setActiveDropdown(null)}
           >
             <Link
               href={item.href}
-              className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+              className={`inline-flex items-center gap-1 px-3.5 py-1.5 text-[14px] font-medium transition-colors duration-150 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#134E4A] ${
                 isOpen
-                  ? "text-[#134E4A] bg-[#EFECE6]/80"
-                  : "text-[#18221E]/80 hover:text-[#18221E] hover:bg-[#EFECE6]/60"
+                  ? "text-[#18221E] bg-[#EFECE6]/70"
+                  : "text-[#18221E]/75 hover:text-[#18221E] hover:bg-[#EFECE6]/50"
               }`}
             >
               <span>{item.label}</span>
 
-              {item.badge && (
-                <span className="px-1.5 py-0.2 text-[10px] font-semibold rounded bg-[#D97706]/15 text-[#C2410C]">
-                  {item.badge}
-                </span>
-              )}
-
-              {hasSubItems && (
+              {hasSub && (
                 <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 text-[#18221E]/60 ${
-                    isOpen ? "rotate-180 text-[#134E4A]" : ""
+                  className={`w-3.5 h-3.5 text-[#18221E]/50 transition-transform duration-150 ${
+                    isOpen ? "rotate-180 text-[#18221E]" : ""
                   }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               )}
             </Link>
 
-            {/* Dropdown Menu for complex items like Product & Solution */}
-            {hasSubItems && isOpen && (
-              <div className="absolute left-0 mt-1 w-80 rounded-2xl bg-[#FFFFFF] p-2.5 shadow-xl ring-1 ring-[#18221E]/10 border border-[#EFECE6] animate-in fade-in slide-in-from-top-2 duration-150 z-50">
-                <div className="space-y-1">
-                  {item.subItems?.map((sub) => (
-                    <Link
-                      key={sub.title}
-                      href={sub.href}
-                      className="block p-2.5 rounded-xl transition-all duration-150 hover:bg-[#EFECE6]/70 group"
-                    >
-                      <div className="text-sm font-semibold text-[#18221E] group-hover:text-[#134E4A] flex items-center justify-between">
-                        <span>{sub.title}</span>
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#D97706]">
-                          →
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#18221E]/70 line-clamp-2 mt-0.5 leading-relaxed">
-                        {sub.description}
-                      </p>
-                    </Link>
-                  ))}
+            {/* Dropdown Panel */}
+            {hasSub && isOpen && (
+              <div
+                className="absolute left-0 top-full pt-1.5 w-84 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
+                role="region"
+                aria-label={`Submenu ${item.label}`}
+              >
+                <div className="bg-[#FFFFFF] rounded-xl border border-[#EFECE6] p-2 shadow-[0_10px_30px_rgba(24,34,30,0.08)]">
+                  <div className="space-y-0.5">
+                    {item.subItems?.map((sub) => (
+                      <Link
+                        key={sub.title}
+                        href={sub.href}
+                        className="group flex flex-col p-2.5 rounded-lg transition-colors duration-150 hover:bg-[#F7F5F0]"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[13px] font-semibold text-[#18221E] group-hover:text-[#134E4A] transition-colors">
+                            {sub.title}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="text-xs text-[#D97706] opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0"
+                          >
+                            →
+                          </span>
+                        </div>
+                        <p className="text-[12px] text-[#18221E]/65 leading-relaxed mt-0.5">
+                          {sub.description}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -148,4 +154,3 @@ export function NavLinks({ className = "" }: NavLinksProps) {
     </nav>
   );
 }
-
