@@ -1,6 +1,8 @@
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/ui/hero-section-2";
+import { ProblemSolutionSection } from "@/components/problem-solution/ProblemSolutionSection";
 import { ProductSection } from "@/components/product/ProductSection";
+import { HowItWorksSection } from "@/components/how-it-works";
 
 export default function Home() {
   return (
@@ -55,6 +57,12 @@ export default function Home() {
 
         {/* 3. Product Section: Visual Before & After (From Chaos to Clarity) */}
         <ProductSection />
+
+        {/* 4. Problem & Solution Section: Dark Swiss Grid */}
+        <ProblemSolutionSection />
+
+        {/* 5. How It Works Section: 4-Step Interactive Architecture */}
+        <HowItWorksSection />
 
         {/* Existing Section (No new sections added) */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
