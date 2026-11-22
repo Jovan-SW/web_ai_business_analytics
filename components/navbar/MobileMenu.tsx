@@ -12,6 +12,25 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.startsWith("#")) {
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        window.history.pushState(null, "", href);
+      }
+    }
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -60,7 +79,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                           <Link
                             key={sub.title}
                             href={sub.href}
-                            onClick={onClose}
+                            onClick={(e) => handleNavClick(e, sub.href)}
                             className="block py-1 hover:text-[#134E4A]"
                           >
                             <p className="text-[14px] font-medium text-[#18221E]">
@@ -77,7 +96,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 ) : (
                   <Link
                     href={item.href}
-                    onClick={onClose}
+                    onClick={(e) => handleNavClick(e, item.href)}
                     className="flex items-center justify-between py-1.5 text-[15px] font-medium text-[#18221E] hover:text-[#134E4A] transition-colors"
                   >
                     <span>{item.label}</span>

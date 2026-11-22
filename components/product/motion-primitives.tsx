@@ -216,4 +216,38 @@ export function SpotlightCard({
   );
 }
 
+/**
+ * BlurFadeIn component
+ * Subtle blur-to-focus entrance animation with customizable delay, easing, and vertical offset.
+ */
+export function BlurFadeIn({
+  children,
+  delay = 0,
+  duration = 0.55,
+  yOffset = 16,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  duration?: number;
+  yOffset?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: yOffset, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{
+        duration,
+        delay,
+        ease: EASE_TASTE,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 

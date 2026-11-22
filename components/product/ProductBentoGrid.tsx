@@ -26,8 +26,6 @@ import {
   Sparkles,
   BarChart3,
   Layers,
-  ChevronsUpDown,
-  MessageSquare,
 } from "lucide-react";
 
 /* =========================================================================
@@ -153,7 +151,7 @@ function AutoLayoutDashboardCard({
 }
 
 /* =========================================================================
-   CARD 2 (col-span-5): Contextual AI Business Assistant (3-Chat Scrollable)
+   CARD 2 (col-span-5): Contextual AI Business Assistant (Sequential 3-Chat)
    ========================================================================= */
 function ContextualAiBusinessBotCard({
   activeIndustry = "saas",
@@ -162,34 +160,91 @@ function ContextualAiBusinessBotCard({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const threadRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isInView = useInView(containerRef, { once: true, amount: 0.25 });
   const data: IndustryData =
     PRODUCT_INDUSTRIES[activeIndustry] || PRODUCT_INDUSTRIES.saas;
 
-  // Multi-Beat Chat Choreography State:
-  // Beat 0: idle
-  // Beat 1 (0.20s): user bubble
-  // Beat 2 (0.75s): typing status indicator
-  // Beat 3 (1.55s): AI response card
-  // Beat 4 (1.90s): data chips pop in
+  // Step-by-step Conversation Choreography:
+  // Conv 0: Step 1 (Question) -> Step 2 (Thinking) -> Step 3 (Answer)
+  // Conv 1: Step 4 (Question & Scroll) -> Step 5 (Thinking) -> Step 6 (Answer & Scroll)
+  // Conv 2: Step 7 (Question & Scroll) -> Step 8 (Thinking) -> Step 9 (Answer & Scroll)
   const [chatStep, setChatStep] = useState<number>(0);
+
+  const scrollToThread = (index: number) => {
+    const container = scrollRef.current;
+    const target = threadRefs.current[index];
+    if (!container || !target) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const scrollOffset =
+      targetRect.top - containerRect.top + container.scrollTop - 6;
+
+    container.scrollTo({
+      top: Math.max(0, scrollOffset),
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     if (!isInView) return;
     setChatStep(0);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
 
-    const t1 = setTimeout(() => setChatStep(1), 200);
-    const t2 = setTimeout(() => setChatStep(2), 750);
-    const t3 = setTimeout(() => setChatStep(3), 1550);
-    const t4 = setTimeout(() => setChatStep(4), 1900);
+    const timeouts: NodeJS.Timeout[] = [];
+
+    // Conversation 0
+    timeouts.push(setTimeout(() => setChatStep(1), 250));
+    timeouts.push(setTimeout(() => setChatStep(2), 850));
+    timeouts.push(setTimeout(() => setChatStep(3), 1700));
+
+    // Conversation 1
+    timeouts.push(setTimeout(() => setChatStep(4), 3100));
+    timeouts.push(setTimeout(() => setChatStep(5), 3750));
+    timeouts.push(setTimeout(() => setChatStep(6), 4600));
+
+    // Conversation 2
+    timeouts.push(setTimeout(() => setChatStep(7), 6000));
+    timeouts.push(setTimeout(() => setChatStep(8), 6650));
+    timeouts.push(setTimeout(() => setChatStep(9), 7500));
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+      timeouts.forEach(clearTimeout);
     };
   }, [isInView, activeIndustry]);
+
+  useEffect(() => {
+    if (chatStep === 4) {
+      const timer = setTimeout(() => scrollToThread(1), 60);
+      return () => clearTimeout(timer);
+    } else if (chatStep === 6) {
+      const timer = setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTo({
+            top: scrollRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (chatStep === 7) {
+      const timer = setTimeout(() => scrollToThread(2), 60);
+      return () => clearTimeout(timer);
+    } else if (chatStep === 9) {
+      const timer = setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTo({
+            top: scrollRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [chatStep]);
 
   const conversations = data.chatScenario.conversations || [];
 
@@ -205,12 +260,12 @@ function ContextualAiBusinessBotCard({
         </p>
       </div>
 
-      {/* 2. Visual Stage: Dark Minimal Chat Canvas (Scrollable 3-Thread Stage) */}
+      {/* 2. Visual Stage: Dark Minimal Chat Canvas */}
       <div
         ref={containerRef}
         className="w-full rounded-2xl bg-black/55 border border-white/[0.08] p-3.5 sm:p-4 flex flex-col justify-between gap-2.5 relative min-h-[300px] overflow-hidden"
       >
-        {/* Top Header of Chat Stage with Live Cue */}
+        {/* Top Header of Chat Stage without bubble badges */}
         <div className="flex items-center justify-between pb-2.5 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-md bg-[#134E4A] flex items-center justify-center text-[#D97706]">
@@ -220,11 +275,6 @@ function ContextualAiBusinessBotCard({
               Jovix Copilot Thread
             </span>
           </div>
-
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[9.5px] font-mono text-white/50">
-            <ChevronsUpDown className="w-3 h-3 text-[#D97706]" />
-            <span>Scrollable (3 Conversations)</span>
-          </div>
         </div>
 
         {/* Scrollable Conversation Container */}
@@ -233,71 +283,73 @@ function ContextualAiBusinessBotCard({
           className="h-[230px] sm:h-[245px] overflow-y-auto pr-1.5 space-y-4 overscroll-contain [scrollbar-width:thin] [scrollbar-color:rgba(217,119,6,0.35)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-white/[0.02] [&::-webkit-scrollbar-thumb]:bg-[#D97706]/40 hover:[&::-webkit-scrollbar-thumb]:bg-[#D97706]/70 [&::-webkit-scrollbar-thumb]:rounded-full"
         >
           {conversations.map((conv, idx) => {
-            const isFirstChat = idx === 0;
+            const questionStep = idx * 3 + 1;
+            const thinkingStep = idx * 3 + 2;
+            const answerStep = idx * 3 + 3;
+
+            if (chatStep < questionStep) return null;
 
             return (
               <div
                 key={conv.id}
                 id={`chat-thread-${idx}`}
+                ref={(el) => {
+                  threadRefs.current[idx] = el;
+                }}
                 className="space-y-2.5 pt-1"
               >
-                {/* Separator between threads */}
+                {/* Clean divider line between conversation threads */}
                 {idx > 0 && (
-                  <div className="flex items-center justify-between py-1.5 border-t border-white/[0.06] my-2 text-[9px] font-mono text-white/40">
-                    <span className="flex items-center gap-1.5">
-                      <MessageSquare className="w-3 h-3 text-[#D97706]" />
-                      Conversation #{idx + 1}
-                    </span>
-                    <span>{conv.time}</span>
-                  </div>
+                  <div className="border-t border-white/[0.07] my-3" />
                 )}
 
                 {/* USER BUBBLE */}
-                {(!isFirstChat || chatStep >= 1) && (
-                  <motion.div
-                    initial={isFirstChat ? { opacity: 0, x: 14, y: 6 } : false}
-                    animate={{ opacity: 1, x: 0, y: 0 }}
-                    transition={{ duration: 0.45, ease: EASE_TASTE }}
-                    className="flex items-start justify-end gap-2"
-                  >
-                    <div className="max-w-[88%] rounded-2xl rounded-tr-xs bg-[#134E4A] text-white px-3 py-2 text-xs leading-relaxed shadow-md border border-white/10">
-                      <p className="font-medium">{conv.userQuestion}</p>
-                      <span className="block text-[9px] font-mono text-white/50 text-right mt-1">
-                        {conv.userRole || "Founder"} • {conv.time}
-                      </span>
-                    </div>
-                    <div className="w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/80 shrink-0 mt-0.5">
-                      <User className="w-3 h-3" />
-                    </div>
-                  </motion.div>
-                )}
+                <motion.div
+                  initial={{ opacity: 0, x: 14, y: 6 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  transition={{ duration: 0.45, ease: EASE_TASTE }}
+                  className="flex items-start justify-end gap-2"
+                >
+                  <div className="max-w-[88%] rounded-2xl rounded-tr-xs bg-[#134E4A] text-white px-3 py-2 text-xs leading-relaxed shadow-md border border-white/10">
+                    <p className="font-medium">{conv.userQuestion}</p>
+                    <span className="block text-[9px] font-mono text-white/50 text-right mt-1">
+                      {conv.userRole || "Founder"} {conv.time}
+                    </span>
+                  </div>
+                  <div className="w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white/80 shrink-0 mt-0.5">
+                    <User className="w-3 h-3" />
+                  </div>
+                </motion.div>
 
-                {/* TYPING STATUS (Only during Beat 2 for first chat) */}
-                {isFirstChat && chatStep === 2 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center gap-1.5 pl-1 py-0.5"
-                  >
-                    <div className="w-4 h-4 rounded-full bg-[#134E4A]/80 text-[#D97706] flex items-center justify-center">
-                      <Bot className="w-2.5 h-2.5" />
-                    </div>
-                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] font-mono text-white/60">
-                      <span>AI analyzing data</span>
-                      <span className="flex items-center gap-0.5 text-[#D97706]">
-                        <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce [animation-delay:-0.3s]" />
-                        <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce [animation-delay:-0.15s]" />
-                        <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce" />
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
+                {/* TYPING STATUS */}
+                <AnimatePresence>
+                  {chatStep === thinkingStep && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-1.5 pl-1 py-0.5"
+                    >
+                      <div className="w-4 h-4 rounded-full bg-[#134E4A]/80 text-[#D97706] flex items-center justify-center">
+                        <Bot className="w-2.5 h-2.5" />
+                      </div>
+                      <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] font-mono text-white/60">
+                        <span>AI analyzing data</span>
+                        <span className="flex items-center gap-0.5 text-[#D97706]">
+                          <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce [animation-delay:-0.3s]" />
+                          <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce [animation-delay:-0.15s]" />
+                          <span className="w-1 h-1 rounded-full bg-[#D97706] animate-bounce" />
+                        </span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* AI RESPONSE CARD */}
-                {(!isFirstChat || chatStep >= 3) && (
+                {chatStep >= answerStep && (
                   <motion.div
-                    initial={isFirstChat ? { opacity: 0, y: 8 } : false}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.45, ease: EASE_TASTE }}
                     className="flex items-start gap-2"
@@ -309,39 +361,6 @@ function ContextualAiBusinessBotCard({
                       <p className="text-white/85 text-[11px] sm:text-xs font-normal">
                         {conv.aiSummary}
                       </p>
-
-                      {/* DATA CHIPS */}
-                      {(!isFirstChat || chatStep >= 4) && (
-                        <div className="flex flex-wrap gap-1 mt-2 pt-1.5 border-t border-white/[0.06]">
-                          {conv.aiChips.map((chip) => (
-                            <span
-                              key={chip.label}
-                              className={`text-[9.5px] font-mono px-1.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
-                                chip.type === "critical"
-                                  ? "bg-rose-500/15 border-rose-500/30 text-rose-300"
-                                  : chip.type === "warning"
-                                  ? "bg-amber-500/15 border-amber-500/30 text-amber-300"
-                                  : chip.type === "success"
-                                  ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
-                                  : "bg-[#134E4A]/30 border-[#134E4A]/60 text-white/80"
-                              }`}
-                            >
-                              <span
-                                className={`w-1 h-1 rounded-full ${
-                                  chip.type === "critical"
-                                    ? "bg-rose-400"
-                                    : chip.type === "warning"
-                                    ? "bg-amber-400"
-                                    : chip.type === "success"
-                                    ? "bg-emerald-400"
-                                    : "bg-[#10B981]"
-                                }`}
-                              />
-                              {chip.label}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </motion.div>
                 )}

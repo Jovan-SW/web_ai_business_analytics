@@ -35,6 +35,24 @@ interface NavLinksProps {
 export function NavLinks({ className = "" }: NavLinksProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.startsWith("#")) {
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        window.history.pushState(null, "", href);
+      }
+    }
+  };
+
   return (
     <nav
       className={`hidden md:flex items-center gap-1 ${className}`}
@@ -53,6 +71,7 @@ export function NavLinks({ className = "" }: NavLinksProps) {
           >
             <Link
               href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className={`inline-flex items-center gap-1 px-3.5 py-1.5 text-[14px] font-medium transition-colors duration-150 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#134E4A] ${
                 isOpen
                   ? "text-[#18221E] bg-[#EFECE6]/70"
@@ -92,6 +111,10 @@ export function NavLinks({ className = "" }: NavLinksProps) {
                       <Link
                         key={sub.title}
                         href={sub.href}
+                        onClick={(e) => {
+                          setActiveDropdown(null);
+                          handleNavClick(e, sub.href);
+                        }}
                         className="group flex flex-col p-2.5 rounded-lg transition-colors duration-150 hover:bg-[#F7F5F0]"
                       >
                         <div className="flex items-center justify-between">
