@@ -9,41 +9,21 @@ import {
 import { TACTILE_SPRING, SwissHairline } from "./swiss-motion";
 
 export function SwissResolutionMatrix() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [scrollStep, setScrollStep] = useState<number>(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
 
-  // Scroll-Pinned Sequence: Pin the table while scrolling through the 4 friction points
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    // Map progress 0 -> 1 smoothly across 4 friction points
-    const step = Math.min(
-      PROBLEM_SOLUTION_PAIRS.length - 1,
-      Math.max(0, Math.floor(progress * PROBLEM_SOLUTION_PAIRS.length))
-    );
-    setScrollStep(step);
-  });
-
-  // Effective active point: Mouse hover takes precedence, fallback to scroll position
-  const activeIndex = hoveredIndex !== null ? hoveredIndex : scrollStep;
+  // Active point: Mouse hover takes precedence, default to first item
+  const activeIndex = hoveredIndex !== null ? hoveredIndex : 0;
 
   return (
     <div
-      ref={containerRef}
-      className="relative w-full h-[220vh] sm:h-[250vh]"
-      data-slot="ps-resolution-scroll-container"
+      className="relative w-full mb-0"
+      data-slot="ps-resolution-container"
     >
-      {/* Sticky Pin: Matrix remains locked in the viewport while user scrolls through points */}
-      <div className="sticky top-20 sm:top-24 w-full z-10">
-        <section
-          data-slot="ps-resolution-grid"
-          aria-label="Resolution Matrix"
-          className="w-full bg-white rounded-3xl border border-[#18221E]/10 shadow-sm overflow-hidden select-none"
-        >
+      <section
+        data-slot="ps-resolution-grid"
+        aria-label="Resolution Matrix"
+        className="w-full bg-white rounded-3xl border border-[#18221E]/10 shadow-sm overflow-hidden select-none"
+      >
           {/* 1. SECTION SUB-HEADER WITH STEP TELEMETRY */}
           <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-[#18221E]/10 bg-[#F7F5F0]/70 flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg sm:text-2xl font-extrabold tracking-tight text-[#18221E]">
@@ -292,7 +272,6 @@ export function SwissResolutionMatrix() {
             )}
           </ol>
         </section>
-      </div>
     </div>
   );
 }

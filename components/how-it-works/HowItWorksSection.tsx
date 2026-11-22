@@ -1,26 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, MotionConfig } from "framer-motion";
-import { HOW_IT_WORKS_STEPS, type HowItWorksStep } from "./how-it-works-data";
-import { HowItWorksStepVisual } from "./HowItWorksStepVisual";
+import React from "react";
+import { MotionConfig } from "framer-motion";
+import {
+  FeatureUIRow,
+  ChecklistVisual,
+  TimelineVisual,
+  DashboardVisual,
+  CopilotVisual,
+} from "@/components/ui/feature-ui-row";
 
 export function HowItWorksSection() {
-  const [activeStepId, setActiveStepId] = useState<string>(
-    HOW_IT_WORKS_STEPS[0].id
-  );
-
-  const activeStep =
-    HOW_IT_WORKS_STEPS.find((s) => s.id === activeStepId) ||
-    HOW_IT_WORKS_STEPS[0];
-
   return (
     <MotionConfig reducedMotion="user">
       <section
         id="how-it-works"
         aria-labelledby="how-it-works-heading"
         data-section="how-it-works"
-        className="relative w-full py-20 sm:py-28 lg:py-32 bg-[#F7F5F0] text-[#18221E] border-b border-[#18221E]/10 scroll-mt-20 overflow-hidden"
+        className="relative w-full pt-14 sm:pt-20 pb-20 sm:pb-28 lg:pb-32 bg-[#F7F5F0] text-[#18221E] border-b border-[#18221E]/10 scroll-mt-20 overflow-hidden"
       >
         {/* Subtle Atmospheric Grid Background */}
         <div
@@ -32,7 +29,7 @@ export function HowItWorksSection() {
           {/* ===================================================================
               1. SECTION HEADER
               =================================================================== */}
-          <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-24">
             <span className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-[#D97706] block mb-3">
               HOW IT WORKS
             </span>
@@ -43,157 +40,102 @@ export function HowItWorksSection() {
               From Raw Data Chaos to Boardroom Clarity in Four Steps
             </h2>
             <p className="mt-4 text-base sm:text-lg text-[#18221E]/75 leading-relaxed font-normal">
-              Zero brittle ETL pipelines and zero manual formula wrangling.
+              No fragile ETL pipelines and zero manual formula wrangling.
               Activate live multi-source intelligence in under two minutes.
             </p>
           </div>
 
           {/* ===================================================================
-              2. DESKTOP INTERACTIVE STEPPER SPLIT (lg:grid)
+              2. FOUR STEP FEATURE ROWS WITH ANIMATED ODOMETER & VISUALS
               =================================================================== */}
-          <div className="hidden lg:grid grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Column: Interactive 4-Step Nav List */}
-            <div className="col-span-5 space-y-3">
-              {HOW_IT_WORKS_STEPS.map((step: HowItWorksStep) => {
-                const isActive = activeStepId === step.id;
+          <div className="flex flex-col gap-16 sm:gap-24 md:gap-32">
+            {/* Step 1: Sign in & Secure Workspace */}
+            <FeatureUIRow
+              eyebrow="STEP 01 // AUTHENTICATION"
+              title="Sign In with Enterprise Confidence"
+              body="Authenticate in seconds via Google Workspace or enterprise SAML SSO. Bank-grade 256-bit AES encryption shields your financial records from day zero with strict zero-retention policies."
+              cta={{ label: "View security certifications", href: "#register" }}
+              tone="spruce"
+              visual={
+                <ChecklistVisual
+                  title="Tenant Security Verification"
+                  rows={[
+                    { label: "Google / SAML SSO", value: "Verified" },
+                    { label: "Zero Data Retention", value: "Active" },
+                    { label: "Isolated Database Vault", value: "Encrypted" },
+                    { label: "Immutable Audit Logs", value: "Compliant" },
+                  ]}
+                  stat={{
+                    value: 100,
+                    suffix: "%",
+                    label: "Tenant Isolation Compliance",
+                  }}
+                  badgeTone="spruce"
+                />
+              }
+            />
 
-                return (
-                  <div
-                    key={step.id}
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={isActive}
-                    onClick={() => setActiveStepId(step.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setActiveStepId(step.id);
-                      }
-                    }}
-                    className={`relative p-5 sm:p-6 rounded-2xl cursor-pointer transition-all duration-200 focus-visible:outline-none ${
-                      isActive
-                        ? "bg-white shadow-sm border border-[#18221E]/10"
-                        : "hover:bg-white/60 border border-transparent"
-                    }`}
-                  >
-                    {/* Active Accent Bar Indicator */}
-                    {isActive && (
-                      <motion.span
-                        layoutId="active-step-bar"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                        className="absolute inset-y-0 left-0 w-1.5 bg-[#134E4A] rounded-l-2xl"
-                      />
-                    )}
+            {/* Step 2: Create Workspace & Ingest Data */}
+            <FeatureUIRow
+              reverse
+              tone="charcoal"
+              eyebrow="STEP 02 // DATA INGESTION"
+              title="Create Workspace & Connect Data Sources"
+              body="Set up your company workspace and link Stripe, QuickBooks, NetSuite, or upload raw CSV ledgers. Jovix normalizes chaotic column headers and transaction schemas in sub-seconds with zero brittle ETL pipelines."
+              cta={{ label: "Explore supported connectors", href: "#product" }}
+              visual={
+                <TimelineVisual
+                  title="Multi-Channel Ingestion Pipeline"
+                  stages={[
+                    { label: "Stripe & POS", count: 2 },
+                    { label: "QuickBooks & ERP", count: 2 },
+                    { label: "Raw CSV Ledgers", count: 1 },
+                  ]}
+                  total={5}
+                  note="50+ live connectors unified into a normalized ledger in < 1.8s"
+                />
+              }
+            />
 
-                    <div className="flex items-start gap-4">
-                      {/* Step Number */}
-                      <span
-                        className={`text-sm font-mono font-extrabold tabular-nums pt-0.5 transition-colors ${
-                          isActive ? "text-[#134E4A]" : "text-[#18221E]/35"
-                        }`}
-                      >
-                        {step.stepNumber}
-                      </span>
+            {/* Step 3: Auto-Generate AI Dashboard */}
+            <FeatureUIRow
+              eyebrow="STEP 03 // AUTOMATED SYNTHESIS"
+              title="Auto-Generate Executive AI Dashboards"
+              body="Watch raw transaction logs transform into real-time KPI cards, net margin trajectory curves, and automated cost variance flags without writing a single spreadsheet formula."
+              cta={{ label: "Inspect dashboard intelligence", href: "#solution" }}
+              tone="spruce"
+              visual={
+                <DashboardVisual
+                  marginYield="42.8%"
+                  reconciledNet="$184,200"
+                  precisionStat={{
+                    value: 99,
+                    suffix: ".4%",
+                    label: "Financial Formula Precision",
+                  }}
+                />
+              }
+            />
 
-                      {/* Step Content */}
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center justify-between">
-                          <h3
-                            className={`text-base font-bold tracking-tight transition-colors ${
-                              isActive ? "text-[#18221E]" : "text-[#18221E]/70"
-                            }`}
-                          >
-                            {step.title}
-                          </h3>
-                        </div>
-
-                        <p
-                          className={`text-xs sm:text-sm leading-relaxed transition-colors ${
-                            isActive ? "text-[#18221E]" : "text-[#18221E]/50"
-                          }`}
-                        >
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Right Column: Live Interactive Visual Stage */}
-            <div className="col-span-7">
-              <HowItWorksStepVisual activeStepId={activeStepId} />
-            </div>
-          </div>
-
-          {/* ===================================================================
-              3. MOBILE / TABLET INTERACTIVE TABS & STAGE (< lg)
-              =================================================================== */}
-          <div className="lg:hidden space-y-6">
-            {/* Step Selection Pills Tab Rail */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {HOW_IT_WORKS_STEPS.map((step) => {
-                const isActive = activeStepId === step.id;
-
-                return (
-                  <button
-                    key={step.id}
-                    type="button"
-                    onClick={() => setActiveStepId(step.id)}
-                    className={`p-3 rounded-xl text-left border transition-all ${
-                      isActive
-                        ? "bg-white border-[#134E4A] shadow-xs"
-                        : "bg-white/60 border-[#18221E]/10 text-[#18221E]/70"
-                    }`}
-                  >
-                    <span
-                      className={`text-[11px] font-mono font-bold block mb-1 ${
-                        isActive ? "text-[#134E4A]" : "text-[#18221E]/40"
-                      }`}
-                    >
-                      {step.stepNumber}
-                    </span>
-                    <span
-                      className={`text-xs font-bold tracking-tight block truncate ${
-                        isActive ? "text-[#18221E]" : "text-[#18221E]/70"
-                      }`}
-                    >
-                      {step.title}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active Step Description Card for Mobile */}
-            <div className="p-4 rounded-2xl bg-white border border-[#18221E]/10 shadow-xs">
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-mono font-bold text-[#134E4A]">
-                  Step {activeStep.stepNumber}
-                </span>
-                <span className="text-[10px] uppercase font-bold text-[#D97706] font-mono px-2 py-0.5 rounded bg-[#D97706]/10">
-                  {activeStep.tag}
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-[#18221E] mb-1">
-                {activeStep.title}
-              </h3>
-              <p className="text-xs text-[#18221E]/80 leading-relaxed">
-                {activeStep.description}
-              </p>
-            </div>
-
-            {/* Active Step Live Visual */}
-            <HowItWorksStepVisual activeStepId={activeStepId} />
+            {/* Step 4: Interrogate with AI Copilot */}
+            <FeatureUIRow
+              reverse
+              tone="charcoal"
+              eyebrow="STEP 04 // CONVERSATIONAL INTELLIGENCE"
+              title="Ask Complex 'Why' Questions in Plain English"
+              body="Converse directly with your conversational business assistant. Discover the exact root cause behind margin fluctuations, forecast cash burn runway under new hiring scenarios, and receive prioritized execution roadmaps."
+              cta={{ label: "Test conversational bot", href: "#demo" }}
+              visual={
+                <CopilotVisual
+                  question="Why did net profit margin dip 3.8% this week despite record sales volume?"
+                  answer="Top-line revenue climbed +14%, but promotional discount code 'OCTOBER-BOOST' overlapped with duplicate cloud vendor invoices ($4,200), compressing gross margin."
+                  actionTag="1-Click Deprecate Expired Promo"
+                />
+              }
+            />
           </div>
         </div>
       </section>
     </MotionConfig>
   );
 }
-

@@ -14,7 +14,7 @@ export function ProblemSolutionSection() {
         id="masalah-solusi"
         aria-labelledby="problem-solution-heading"
         data-section="problem-solution"
-        className="w-full bg-[#F7F5F0] text-[#18221E] py-20 sm:py-28 lg:py-32 border-b border-[#18221E]/10 scroll-mt-20 overflow-hidden relative"
+        className="w-full bg-[#F7F5F0] text-[#18221E] pt-20 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 border-b border-[#18221E]/10 scroll-mt-20 overflow-hidden relative"
       >
         {/* Subtle Atmospheric Warm Paper & Architectural Grid Backdrops */}
         <div
