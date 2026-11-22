@@ -3,6 +3,8 @@ import { HeroSection } from "@/components/ui/hero-section-2";
 import { ProblemSolutionSection } from "@/components/problem-solution/ProblemSolutionSection";
 import { ProductSection } from "@/components/product/ProductSection";
 import { HowItWorksSection } from "@/components/how-it-works";
+import { FaqSection } from "@/components/faq";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
@@ -64,55 +66,11 @@ export default function Home() {
         {/* 5. How It Works Section: 4-Step Interactive Architecture */}
         <HowItWorksSection />
 
-        {/* Existing Section (No new sections added) */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#D97706]">
-              Why Jovix?
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#18221E] mt-2">
-              One unified engine for your entire business analysis workflow
-            </h2>
-            <p className="mt-4 text-base text-[#18221E]/70 leading-relaxed">
-              Beyond static spreadsheets and passive dashboards — Jovix continuously audits live operations, flags margin decay, and drafts boardroom-ready strategic steps.
-            </p>
-          </div>
+        {/* 6. Frequently Asked Questions Section */}
+        <FaqSection />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#EFECE6] hover:border-[#134E4A]/30 transition-all duration-200 hover:-translate-y-1 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-[#134E4A]/10 text-[#134E4A] flex items-center justify-center font-bold text-lg mb-4">
-                ⚡
-              </div>
-              <h3 className="text-lg font-bold text-[#18221E]">Instant Ingestion</h3>
-              <p className="mt-2 text-sm text-[#18221E]/70 leading-relaxed">
-                Automatically ingest live records from SQL databases, QuickBooks, NetSuite, Google Sheets, and CRMs with zero brittle pipelines.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#EFECE6] hover:border-[#134E4A]/30 transition-all duration-200 hover:-translate-y-1 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-[#D97706]/15 text-[#C2410C] flex items-center justify-center font-bold text-lg mb-4">
-                🔍
-              </div>
-              <h3 className="text-lg font-bold text-[#18221E]">Variance &amp; Leak Detection</h3>
-              <p className="mt-2 text-sm text-[#18221E]/70 leading-relaxed">
-                Detect hidden vendor overcharges, budget variance spikes, and cash burn runaway weeks before the monthly accounting close.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#EFECE6] hover:border-[#134E4A]/30 transition-all duration-200 hover:-translate-y-1 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-[#134E4A]/10 text-[#134E4A] flex items-center justify-center font-bold text-lg mb-4">
-                📈
-              </div>
-              <h3 className="text-lg font-bold text-[#18221E]">Actionable Playbooks</h3>
-              <p className="mt-2 text-sm text-[#18221E]/70 leading-relaxed">
-                Receive prioritized strategic roadmaps and cash runway projections designed specifically for founders and executive teams.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* 7. Modular Swiss Minimal Footer */}
+        <Footer />
       </main>
     </div>
   );

@@ -54,7 +54,6 @@ export function HowItWorksSection() {
               eyebrow="STEP 01 // AUTHENTICATION"
               title="Sign In with Enterprise Confidence"
               body="Authenticate in seconds via Google Workspace or enterprise SAML SSO. Bank-grade 256-bit AES encryption shields your financial records from day zero with strict zero-retention policies."
-              cta={{ label: "View security certifications", href: "#register" }}
               tone="spruce"
               visual={
                 <ChecklistVisual
@@ -82,7 +81,6 @@ export function HowItWorksSection() {
               eyebrow="STEP 02 // DATA INGESTION"
               title="Create Workspace & Connect Data Sources"
               body="Set up your company workspace and link Stripe, QuickBooks, NetSuite, or upload raw CSV ledgers. Jovix normalizes chaotic column headers and transaction schemas in sub-seconds with zero brittle ETL pipelines."
-              cta={{ label: "Explore supported connectors", href: "#product" }}
               visual={
                 <TimelineVisual
                   title="Multi-Channel Ingestion Pipeline"
@@ -102,7 +100,6 @@ export function HowItWorksSection() {
               eyebrow="STEP 03 // AUTOMATED SYNTHESIS"
               title="Auto-Generate Executive AI Dashboards"
               body="Watch raw transaction logs transform into real-time KPI cards, net margin trajectory curves, and automated cost variance flags without writing a single spreadsheet formula."
-              cta={{ label: "Inspect dashboard intelligence", href: "#solution" }}
               tone="spruce"
               visual={
                 <DashboardVisual
@@ -124,7 +121,6 @@ export function HowItWorksSection() {
               eyebrow="STEP 04 // CONVERSATIONAL INTELLIGENCE"
               title="Ask Complex 'Why' Questions in Plain English"
               body="Converse directly with your conversational business assistant. Discover the exact root cause behind margin fluctuations, forecast cash burn runway under new hiring scenarios, and receive prioritized execution roadmaps."
-              cta={{ label: "Test conversational bot", href: "#demo" }}
               visual={
                 <CopilotVisual
                   question="Why did net profit margin dip 3.8% this week despite record sales volume?"

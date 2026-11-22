@@ -469,13 +469,13 @@ export function CopilotVisual({ question, answer, actionTag }: CopilotVisualProp
   return (
     <motion.div
       ref={ref}
-      className="relative w-[min(450px,86vw)] rounded-2xl border border-white/15 bg-[#18221E]/95 p-5 sm:p-6 text-white backdrop-blur-md shadow-2xl space-y-4"
-      initial={{ opacity: 0, y: 50, scale: 0.96 }}
+      className="relative w-[min(450px,86vw)] rounded-2xl border border-white/15 bg-[#18221E]/95 p-5 sm:p-6 text-white backdrop-blur-md shadow-2xl space-y-4 my-2"
+      initial={{ opacity: 0, y: 30, scale: 0.98 }}
       animate={
         inView
           ? {
               opacity: 1,
-              y: [0, -5, 0],
+              y: [0, -4, 0],
               scale: 1,
             }
           : {}
@@ -486,19 +486,14 @@ export function CopilotVisual({ question, answer, actionTag }: CopilotVisualProp
           duration: 4.6,
           ease: "easeInOut",
         },
-        duration: 0.9,
+        duration: 0.8,
         ease: [0.16, 1, 0.3, 1],
       }}
     >
       <div className="flex items-center justify-between text-xs pb-2.5 border-b border-white/10 font-mono">
         <div className="flex items-center gap-2">
-          <Sparkles className="size-3.5 text-[#D97706]" />
-          <span className="text-[#D97706] font-bold">JOVIX BUSINESS COPILOT</span>
+          <span className="text-[#D97706] font-bold">JOVIX COPILOT</span>
         </div>
-        <span className="flex items-center gap-1.5 text-emerald-400">
-          <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>READY</span>
-        </span>
       </div>
 
       {/* User Prompt Bubble with Dynamic Entrance */}
@@ -634,7 +629,7 @@ export function FeatureUIRow({
       {/* Visual Canvas Panel with Subtle 3D Hover Lift & Ambient Glow */}
       <motion.div
         className={cn(
-          "relative flex w-full items-center justify-center overflow-hidden rounded-3xl px-5 py-14 sm:py-16 md:aspect-[7/5] md:px-8 md:py-0 shadow-xl border border-[#18221E]/10 cursor-default",
+          "relative flex w-full items-center justify-center overflow-hidden rounded-3xl px-5 py-10 sm:py-14 md:min-h-[460px] lg:min-h-[500px] md:px-8 md:py-8 shadow-xl border border-[#18221E]/10 cursor-default",
           getToneBackground(),
           reverse && "md:order-1"
         )}
