@@ -9,6 +9,7 @@ import {
   DashboardVisual,
   CopilotVisual,
 } from "@/components/ui/feature-ui-row";
+import { StepBeamConnector } from "./StepBeamConnector";
 
 export function HowItWorksSection() {
   return (
@@ -46,9 +47,9 @@ export function HowItWorksSection() {
           </div>
 
           {/* ===================================================================
-              2. FOUR STEP FEATURE ROWS WITH ANIMATED ODOMETER & VISUALS
+              2. FOUR STEP FEATURE ROWS WITH TRACING BEAM CONNECTORS
               =================================================================== */}
-          <div className="flex flex-col gap-16 sm:gap-24 md:gap-32">
+          <div className="flex flex-col gap-0">
             {/* Step 1: Sign in & Secure Workspace */}
             <FeatureUIRow
               eyebrow="STEP 01 // AUTHENTICATION"
@@ -74,6 +75,13 @@ export function HowItWorksSection() {
               }
             />
 
+            {/* Neon Orange Tracing Beam Connector: Step 01 -> Step 02 */}
+            <StepBeamConnector
+              stepFrom={1}
+              stepTo={2}
+              direction="rtl"
+            />
+
             {/* Step 2: Create Workspace & Ingest Data */}
             <FeatureUIRow
               reverse
@@ -95,6 +103,13 @@ export function HowItWorksSection() {
               }
             />
 
+            {/* Neon Orange Tracing Beam Connector: Step 02 -> Step 03 */}
+            <StepBeamConnector
+              stepFrom={2}
+              stepTo={3}
+              direction="ltr"
+            />
+
             {/* Step 3: Auto-Generate AI Dashboard */}
             <FeatureUIRow
               eyebrow="STEP 03 // AUTOMATED SYNTHESIS"
@@ -112,6 +127,13 @@ export function HowItWorksSection() {
                   }}
                 />
               }
+            />
+
+            {/* Neon Orange Tracing Beam Connector: Step 03 -> Step 04 */}
+            <StepBeamConnector
+              stepFrom={3}
+              stepTo={4}
+              direction="rtl"
             />
 
             {/* Step 4: Interrogate with AI Copilot */}
